@@ -1,0 +1,8 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "San Francisco";  margin: 0;
+  padding: 0;
+  font-size: 62.5%;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+}
