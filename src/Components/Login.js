@@ -89,21 +89,29 @@ const RememberMe = styled.div`
 `;
 
 const Checkbox = styled.input`
-  margin-right: 3em;
+  margin-right: 2em;
   appearance: none;
   outline: none;
 
-  &:checked::after {
+  &:checked::before {
+    content: '';
+    position: absolute;
+    top: 1em;
+    left: 0;
+    transform: translate(-50%, -50%);
+    width: 1.5em;
+    height: 1.5em;
+    margin-top: -.5em;
     background-color: ${Colors.DarkPurpleDark};
-    border: 3px solid ${Colors.White};
     border-radius: 3px;
   }
 
   &::after {
     content: '';
     position: absolute;
-    top: 0;
+    top: 1em;
     left: 0;
+    transform: translate(-50%, -50%);
     width: 1.5em;
     height: 1.5em;
     margin-top: -.5em;
