@@ -26,6 +26,11 @@ const Wrapper = styled.div`
   background-color: ${Colors.DarkPurple};
   color: black;
   position: relative;
+  @media only screen 
+    and (device-width : 375px) 
+    and (device-height : 812px) {
+      flex: 1 0 45%;
+    }
 `;
 
 const Container = styled.div`
@@ -43,6 +48,11 @@ const Title = styled.h1`
   font-size: 3.5em;
   margin-bottom: .7em;
   color: ${Colors.LightPurpleLight};
+  @media only screen 
+    and (device-width : 375px) 
+    and (device-height : 812px) {
+      margin-bottom: .2em;
+    }
 `;
 
 const LogoContainer = styled.div`

@@ -17,13 +17,8 @@ class Login extends Component {
       userSubmit: false,
       usernameValid: false,
       passwordValid: false,
-    };
-  }
-
-  componentWillMount() {
-    this.setState({
       loadingState: false,
-    });
+    };
   }
 
   componentWillUnmount() {
@@ -213,6 +208,11 @@ const Wrapper = styled.div`
   background-color: ${Colors.LightPurpleLight};
   color: black;
   position: relative;
+  @media only screen 
+    and (device-width : 375px) 
+    and (device-height : 812px) {
+      flex: 1 0 55%;
+    }
 `;
 
 const LoggedInWrapper = styled.div`
@@ -228,14 +228,21 @@ const LogginedInLabel = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 100;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  @media only screen 
+    and (device-width : 375px) 
+    and (device-height : 812px) {
+      top: 0%;
+      width: 100%;
+    }
 `;
 
 const Congrats = styled.div`
-  font-size: 4em;
+  font-size: 2.5em;
 `;
 
 const Caption = styled.div`
@@ -254,6 +261,11 @@ const SignOutButton = styled.button`
   color: ${Colors.DarkPurple};
   font-weight: 600;
   margin-top: 14em;
+  @media only screen 
+    and (device-width : 375px) 
+    and (device-height : 812px) {
+      margin-top: 7em;
+    }
 `;
 
 const Form = styled.form`
@@ -269,6 +281,13 @@ const Form = styled.form`
   width: 30em;
   border-radius: 5px;
   height: 18em;
+  z-index: 100;
+
+    @media only screen 
+    and (device-width : 375px) 
+    and (device-height : 812px) {
+      top: -7%;
+    }
 `;
 
 const Input = styled.input`
@@ -319,9 +338,14 @@ const RememberMe = styled.div`
   display: flex;
   flex-direction: row;
   position: absolute;
-  top: 60%;
+  top: 65%;
   left: 50%;
   transform: translate(-50%, -50%);
+  @media only screen 
+    and (device-width : 375px) 
+    and (device-height : 812px) {
+      top: 35%;
+    }
 `;
 
 const Checkbox = styled.input`
@@ -365,18 +389,28 @@ const Label = styled.div`
 
 const ErrorContainer = styled.div`
   position: absolute;
-  top: 50%;
+  top: 52%;
   left: 50%;
   color: ${Colors.Red};
   transform: translate(-50%, -50%);
+  @media only screen 
+    and (device-width : 375px) 
+    and (device-height : 812px) {
+      top: 22%;
+    }
 `;
 
 const ErrorStatement = styled.div`
   font-size: 1.7em;
   font-weight: 600;
   text-align: center;
-  width: 70%;
+  width: 60%;
   margin: 0 auto;
+  @media only screen 
+    and (device-width : 375px) 
+    and (device-height : 812px) {
+      width: 105%;
+    }
 `;
 
 const SocialMediaContainer = styled.div`
@@ -385,7 +419,7 @@ const SocialMediaContainer = styled.div`
   align-items: center;
   position: absolute;
   left: 50%;
-  top: 85%;
+  top: 90%
   transform: translate(-50%, -50%);
 `;
 
@@ -394,7 +428,7 @@ const SocialMediaLabel = styled.span`
   font-size: 2em;
   font-weight: 600;
   margin-bottom: .2em;
-  font-style: italic;
+  font-style: italic;;
 `;
 
 const IconContainer = styled.div`
