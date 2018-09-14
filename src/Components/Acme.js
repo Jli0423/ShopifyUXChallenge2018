@@ -42,6 +42,12 @@ const Container = styled.div`
   left: 50%;
   top: 35%;
   transform: translate(-50%, -50%);
+
+  @media only screen 
+    and (device-width : 320px) 
+    and (device-height : 568px) {
+      top: 30%;
+  }
 `;
 
 const Title = styled.h1`
@@ -53,6 +59,13 @@ const Title = styled.h1`
     and (device-height : 812px) {
       margin-bottom: .2em;
     }
+
+  @media only screen 
+    and (device-width : 320px) 
+    and (device-height : 568px) {
+      font-size: 3em;
+      margin-bottom: .2em;
+  }
 `;
 
 const LogoContainer = styled.div`

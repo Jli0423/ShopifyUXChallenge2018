@@ -23,6 +23,12 @@ const Wrapper = styled.div`
     and (device-height : 812px) {
       flex-direction: column-reverse;
     }
+
+  @media only screen 
+    and (device-width : 320px) 
+    and (device-height : 568px) {
+      flex-direction: column-reverse;
+    }
 `;
 
 export default App;
