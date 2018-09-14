@@ -22,7 +22,7 @@ class Login extends Component {
 
   componentWillMount() {
     this.setState({
-      userLoggedIn: false,
+      loadingState: false,
     });
   }
 
@@ -39,7 +39,7 @@ class Login extends Component {
     if (countDown === 1) {
       clearInterval(this.intervalId);
       this.setState({
-        userLoggedIn: true,
+        loadingState: true,
       });
     }
   }
@@ -88,7 +88,7 @@ class Login extends Component {
 
   signOut() {
     this.setState({
-      userLoggedIn: false,
+      loadingState: false,
     });
   }
 
@@ -196,12 +196,12 @@ class Login extends Component {
   }
 
   render() {
-    const { userLoggedIn } = this.state;
-    console.log(userLoggedIn);
+    const { loadingState } = this.state;
+    console.log(loadingState);
     return (
       <Wrapper>
         {
-          !userLoggedIn ? this.renderLogin() : this.renderLoggedIn()
+          !loadingState ? this.renderLogin() : this.renderLoggedIn()
         }
       </Wrapper>
     );
@@ -245,7 +245,7 @@ const Caption = styled.div`
 
 const SignOutButton = styled.button`
   height: 2em;
-  width: 10em;
+  width: 9em;
   background: ${Colors.White};
   outline: none;
   border: none;
@@ -338,7 +338,7 @@ const Checkbox = styled.input`
     width: 1em;
     height: 1em;
     margin-top: -.5em;
-    background-color: ${Colors.DarkPurpleDark};
+    background-color: ${Colors.DarkPurple};
     border-radius: 3px;
   }
 

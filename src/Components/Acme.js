@@ -11,10 +11,12 @@ const Acme = () => (
       <Title>
         AcmeStack
       </Title>
-      <Logo
-        src={AcmeLogo}
-        alt="Acme"
-      />
+      <LogoContainer>
+        <Logo
+          src={AcmeLogo}
+          alt="Acme"
+        />
+      </LogoContainer>
     </Container>
   </Wrapper>
 );
@@ -38,16 +40,26 @@ const Container = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 4em;
+  font-size: 3.5em;
+  margin-bottom: .7em;
   color: ${Colors.LightPurpleLight};
 `;
 
-const Logo = styled.img`
-  width: 5em;
-  background-color: ${Colors.White};
-  border-radius: 5px;
-  padding: 1em;
+const LogoContainer = styled.div`
+  width: calc(5em + 14px);
+  height: calc(5em + 14px);
+  background: linear-gradient(45deg, ${Colors.DarkPurple}, ${Colors.LightPurpleDark});
+  display: flex;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+`;
 
+const Logo = styled.img`
+  width: 4em;
+  background-color: ${Colors.White};
+  border-radius: 10px;
+  padding: 1em;
 `;
 
 export default Acme;
