@@ -21,7 +21,7 @@ const Acme = () => (
 
 const Wrapper = styled.div`
   flex: 1 0 50%;
-  background-color: ${Colors.DarkPurpleDark};
+  background-color: ${Colors.DarkPurple};
   color: black;
   position: relative;
 `;

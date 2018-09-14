@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import Colors from '../Data/Colors';
+
+import Google from '../Img/logo-google.svg';
+import Facebook from '../Img/logo-facebook.svg';
+import twitter from '../Img/logo-twitter.svg';
+import Load from '../Img/icon-loading.svg';
 
 class Login extends Component {
   constructor(props) {
@@ -10,66 +15,103 @@ class Login extends Component {
     this.usernameRef = React.createRef();
     this.state = {
       userSubmit: false,
-      username: '',
       usernameValid: false,
-      password: '',
       passwordValid: false,
     };
+  }
+
+  componentWillMount() {
+    this.setState({
+      userLoggedIn: false,
+    });
+  }
+
+  componentWillUnmount() {
+    const { interval } = this.state;
+    clearInterval(interval);
+  }
+
+  timer() {
+    const { countDown } = this.state;
+    this.setState({
+      countDown: countDown - 1,
+    });
+    if (countDown === 1) {
+      clearInterval(this.intervalId);
+      this.setState({
+        userLoggedIn: true,
+      });
+    }
   }
 
   userLogin(e) {
     const username = this.usernameRef.value;
     const password = this.passwordRef.value;
+    let usernameValid = false;
+    let passwordValid = false;
     e.preventDefault();
     if (username.length > 0) {
+      usernameValid = true;
       this.setState({
-        usernameValid: true,
+        usernameValid,
+      });
+    } else {
+      usernameValid = false;
+      this.setState({
+        usernameValid,
       });
     }
 
     if (password.length > 7 && password.length < 25) {
+      passwordValid = true;
       this.setState({
-        passwordValid: true,
+        passwordValid,
       });
-    }
-
-    if (username.length === 0) {
+    } else {
+      passwordValid = false;
       this.setState({
-        usernameValid: false,
-      });
-    }
-
-    if (password.length < 8 || password.length > 25) {
-      this.setState({
-        passwordValid: false,
+        passwordValid,
       });
     }
 
     this.setState({
-      username,
-      password,
       userSubmit: true,
+    });
+
+    if (usernameValid && passwordValid) {
+      this.intervalId = setInterval(this.timer.bind(this), 1000);
+      this.setState({
+        countDown: 1,
+      });
+    }
+  }
+
+  signOut() {
+    this.setState({
+      userLoggedIn: false,
     });
   }
 
-  render() {
+  renderLogin() {
     const {
-      username,
-      password,
       userSubmit,
       usernameValid,
       passwordValid,
+      countDown,
     } = this.state;
-
     return (
-      <Wrapper>
+      <div>
         <Form>
-          <Input
+          <UserInput
+            usernameValid={usernameValid}
+            userSubmit={userSubmit}
             innerRef={(usernameRef) => { this.usernameRef = usernameRef; }}
             placeholder="username"
             type="text"
           />
-          <Input
+          <PasswordInput
+            passwordValid={passwordValid}
+            userSubmit={userSubmit}
             innerRef={(passwordRef) => { this.passwordRef = passwordRef; }}
             placeholder="password"
             type="password"
@@ -77,23 +119,33 @@ class Login extends Component {
           <Submit
             onClick={(click) => { this.userLogin(click); }}
           >
-            login
+            {
+              !countDown ? <span>login</span> : (
+                <Loading
+                  src={Load}
+                />
+              )
+            }
           </Submit>
         </Form>
-        {
+        <ErrorContainer>
+          {
             userSubmit && !usernameValid && (
             <ErrorStatement>
               username must not be empty
             </ErrorStatement>
             )
           }
-        {
-            userSubmit && !passwordValid && (
+          {/* will only show one error at a time
+          to keep UI less clustered */}
+          {
+            userSubmit && !passwordValid && usernameValid && (
             <ErrorStatement>
               password must be between 8 and 24 characters
             </ErrorStatement>
             )
           }
+        </ErrorContainer>
         <RememberMe>
           <Checkbox
             type="checkbox"
@@ -102,6 +154,55 @@ class Login extends Component {
             remember me
           </Label>
         </RememberMe>
+        <SocialMediaContainer>
+          <SocialMediaLabel>
+            or login with
+          </SocialMediaLabel>
+          <IconContainer>
+            <Icon
+              src={Google}
+            />
+            <Icon
+              src={Facebook}
+            />
+            <Icon
+              src={twitter}
+            />
+          </IconContainer>
+        </SocialMediaContainer>
+      </div>
+    );
+  }
+
+  renderLoggedIn() {
+    return (
+      <LoggedInWrapper>
+        <LogginedInLabel>
+          <Congrats>
+            Congratulations
+          </Congrats>
+          <Caption>
+            You have successfully logged in.
+          </Caption>
+          <SignOutButton
+            onClick={() => { this.signOut(); }}
+          >
+            sign out
+          </SignOutButton>
+        </LogginedInLabel>
+
+      </LoggedInWrapper>
+    );
+  }
+
+  render() {
+    const { userLoggedIn } = this.state;
+    console.log(userLoggedIn);
+    return (
+      <Wrapper>
+        {
+          !userLoggedIn ? this.renderLogin() : this.renderLoggedIn()
+        }
       </Wrapper>
     );
   }
@@ -114,6 +215,47 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
+const LoggedInWrapper = styled.div`
+  background-color: ${Colors.DarkPurple};
+  width: 100%;
+  height: 100%;
+`;
+
+const LogginedInLabel = styled.div`
+  color: ${Colors.White};
+  font-weight: 600;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Congrats = styled.div`
+  font-size: 4em;
+`;
+
+const Caption = styled.div`
+  font-size: 1.4em;
+  margin-top: .5em;
+`;
+
+const SignOutButton = styled.button`
+  height: 2em;
+  width: 10em;
+  background: ${Colors.White};
+  outline: none;
+  border: none;
+  border-radius: 20px;
+  font-size: 2em;
+  color: ${Colors.DarkPurple};
+  font-weight: 600;
+  margin-top: 14em;
+`;
+
 const Form = styled.form`
   display: flex;
   position: absolute;
@@ -123,9 +265,10 @@ const Form = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 1px 15px rgba(0,0,0, .25);
+  box-shadow: 0 1px 20px rgba(0,0,0, .15);
   width: 30em;
-  height: 15em;
+  border-radius: 5px;
+  height: 18em;
 `;
 
 const Input = styled.input`
@@ -135,16 +278,28 @@ const Input = styled.input`
   margin: 0;
   border: none;
   text-align: center;
-  font-size: 1.6em;
+  font-size: 1.8em;
   color: ${Colors.DarkPurple};
-  border: 1px solid ${Colors.LightPurple};
+  border-bottom: 1px solid ${Colors.LightPurple};
   font-weight: 600;
+  outline-offset: -2px;
   outline: none;
-
   &::placeholder {
     color: ${Colors.LightPurpleDark};
   }
 `;
+
+const UserInput = Input.extend`
+  border-radius: 5px 5px 0 0;
+  outline: ${props => !props.usernameValid && props.userSubmit && `3px solid ${Colors.Red};`};
+  /* outline-offset: ${props => !props.usernameValid && props.userSubmit && '-2px'}; */
+`;
+
+const PasswordInput = Input.extend`
+  outline: ${props => !props.passwordValid && props.userSubmit && `3px solid ${Colors.Red};`};
+  /* outline-offset: ${props => !props.usernameValid && props.userSubmit && '-2px'}; */
+`;
+
 
 const Submit = styled.button`
   width: 100%;
@@ -152,10 +307,12 @@ const Submit = styled.button`
   padding: 0;
   margin: 0;
   border: none;
-  background-color: ${Colors.DarkPurpleDark};
+  background-color: ${Colors.DarkPurple};
   color: ${Colors.White};
   font-weight: 600;
   font-size: 1.6em;
+  outline: none;
+  border-radius: 0 0 5px 5px;
 `;
 
 const RememberMe = styled.div`
@@ -168,7 +325,7 @@ const RememberMe = styled.div`
 `;
 
 const Checkbox = styled.input`
-  margin-right: 2em;
+  margin-right: 1.2em;
   appearance: none;
   outline: none;
 
@@ -178,8 +335,8 @@ const Checkbox = styled.input`
     top: 1em;
     left: 0;
     transform: translate(-50%, -50%);
-    width: 1.5em;
-    height: 1.5em;
+    width: 1em;
+    height: 1em;
     margin-top: -.5em;
     background-color: ${Colors.DarkPurpleDark};
     border-radius: 3px;
@@ -191,8 +348,8 @@ const Checkbox = styled.input`
     top: 1em;
     left: 0;
     transform: translate(-50%, -50%);
-    width: 1.5em;
-    height: 1.5em;
+    width: 1em;
+    height: 1em;
     margin-top: -.5em;
     border-radius: 3px;
     box-shadow: 0 0 0 1px ${Colors.DarkPurpleDark};
@@ -200,15 +357,75 @@ const Checkbox = styled.input`
   }
 `;
 
-const Label = styled.span`
+const Label = styled.div`
   font-weight: 600;
   font-size: 1.5em;
-  color: ${Colors.DarkPurpleDark};
+  color: ${Colors.DarkPurple};
 `;
 
-const ErrorStatement = styled.span`
-  font-size: 1.2em;
+const ErrorContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
   color: ${Colors.Red};
+  transform: translate(-50%, -50%);
+`;
+
+const ErrorStatement = styled.div`
+  font-size: 1.7em;
+  font-weight: 600;
+  text-align: center;
+  width: 70%;
+  margin: 0 auto;
+`;
+
+const SocialMediaContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  top: 85%;
+  transform: translate(-50%, -50%);
+`;
+
+const SocialMediaLabel = styled.span`
+  color: ${Colors.DarkPurple};
+  font-size: 2em;
+  font-weight: 600;
+  margin-bottom: .2em;
+  font-style: italic;
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`;
+
+const Icon = styled.img`
+  width: 1.5em;
+  height: 1.5em;
+  padding: .8em;
+  margin: 1em;
+  border-radius: 50%;
+  background-color: ${Colors.LightPurple};
+`;
+
+const rotate360 = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const Loading = styled.img`
+  width: 1.5em;
+  height: 1.5em;
+  animation: ${rotate360} 1s linear infinite;
 `;
 
 export default Login;
